@@ -1,6 +1,6 @@
 {
   "name": "robertryanthompson-ca",
-  "compatibility-date": "2025-10-26",
+  "compatibility_date": "2025-10-26",
   "assets": {
     "directory": "./",
     "html_handling": "force-trailing-slash",
