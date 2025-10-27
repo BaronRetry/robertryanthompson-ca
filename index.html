@@ -9,10 +9,83 @@
 </head>
 
 <body>
-  <h1>Kiniote Notes (???)</h1>
+  <h1>Kinoite Notes</h1>
 
   <p>I want to write down every step needed to set up this website so far, so that I don't forget again.</p>
 
+  <p>First, we install Fedora Kiniote. I used this special version of Fedora Media Writer from the download page <a href="https://fedoraproject.org/atomic-desktops/kinoite/download"> here </a>.</p>
+
+  <p>I was having some issues with the download, but after trying it a few times it worked. I also got bitten by an irritating thing Windows does when creating bootable media; Autoplay adds some weird flipped bit that causes the checksum on the bootable drive to fail. I had to open up ms-settings:autoplay and then turn off the option that says "Use AutoPlay for all media and devices".</p>
+
+  <p>After that the install went off without a hitch. I chose the automatic partitioning option, banishing Windows utterly from the machine (although I might bring it back in a VM later just for Excel).</p>
+
+  <p>As of this writing the updates I've received have brought me to Kinoite version 42.20251026.0. To see the list of all ostree commits, do</p>
+
+<q>sudo ostree pull --commit-metadata-only --depth=10 fedora fedora/42/x86_64/kinoite</q>
+
+<p>... and then</p>
+
+<q>sudo ostree pull --commit-metadata-only --depth=10 fedora fedora/42/x86_64/kinoite</q>
+
+  <p>So far I've done all the system updates through the Discover front end. There was a UEFI update as well. Suspend/sleep seems to be broken on the system because if it sleeps the motherboard never wakes up and then I get one of those POST failure messages upon restart. However, sleeping and dimming the monitors works fine at least, and who really cares because it's a desktop PC.</p>
+
+  <p>OK, now we need to set up a Git repo on Github. I also wanted to generate SSH and GPG keys so that I can do signed commits (despite some lingering anxiety about using my identity on the internet).</p>
+
+  <p>First step here is to set the global Git username and password to be the same as what Github has:</p>
+
+   <q>git config --global user.name "Robert Ryan Thompson"</q>
+   <q>git config --global user.email "baronretry@proton.me"</q>
+
+  <p>Then, we generate the SSH key:</p>
+
+  <q>ssh-keygen -t ed25519 -C "baronretry@proton.me"</q>
+
+  <p> ... start the SSH agent ... </p>
+  <q>eval "$(ssh-agent -s)"</q>
+
+  <p> ... add the private key ... </p>
+  <q>ssh-add ~/.ssh/id_ed25519</q>
+
+  <p> ... and then finally emit the public key so that we can give that to Github:</p>
+  
+  <q>cat ~/.ssh/id_ed25519.pub </q>
+
+  <p>The steps to set up a GPG key are similar:</p>
+
+  <q>gpg --full-generate-key</q>
+  <q>gpg --list-secret-keys --keyid-format=long</q>
+  <q>gpg --armor --export gpg --list-secret-keys --keyid-format=long</q>
+  <q>gpg --armor --export KEY_GOES_HERE</q>
+
+  <p>OK! Next, we need to initialize a local Git repo and upload it to Github:</p>
+
+  <q>git status</q>
+  <q>git add README.md</q>
+  <q>git commit -S -m "Initial commit"</q>
+  <q>git branch -M master</q>
+  <q>git remote add origin git@github.com:BaronRetry/robertryanthompson-ca.git</q>
+  <q>git push -u origin master</q>
+  
+  <p>At this point, it's probably worth it to pick a text editor to start working with files in this project. I was considering Kate but I am attached to emacs. Because I anticipate using it everywhere, I install it as a layered package:</p>
+
+  <q>sudo rpm-ostree install emacs</q>
+  <q>systemctl reboot</q>
+
+  <p>Then I added an index.html file (where I eventually put this content) into the repo.</p>
+
+  <p>... cloudflare instrux ...<p>
+
+{
+  "name": "robertryanthompson-ca",
+  "compatibility_date": "2025-10-26",
+  "assets": {
+    "directory": "./",
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "single-page-application",
+  }
+}
+    
+  
  
 </body>
 
